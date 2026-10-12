@@ -29,4 +29,10 @@ class OpenRouterServiceClientTests {
         String text = "1. Setup backend\n2. Setup frontend\n3. Write tests";
         assertThrows(RuntimeException.class, () -> client.parseSubtasks(text));
     }
+
+    @Test
+    void testGenerateContentWithoutApiKeyThrowsIllegalStateException() {
+        assertEquals("nvidia/nemotron-3-ultra-550b-a55b:free", OpenRouterServiceClient.EXCLUSIVE_MODEL);
+        assertThrows(IllegalStateException.class, () -> client.generateContent("Phân rã công việc mẫu"));
+    }
 }

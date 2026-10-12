@@ -18,9 +18,9 @@ spring:
             enable: true
 
   datasource:
-    url: jdbc:postgresql://127.0.0.1:5433/smart_task_db
-    username: admin
-    password: supersecretpassword
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://127.0.0.1:5433/smart_task_db}
+    username: ${SPRING_DATASOURCE_USERNAME:admin}
+    password: ${SPRING_DATASOURCE_PASSWORD:supersecretpassword}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -39,8 +39,8 @@ spring:
 
   data:
     redis:
-      host: 127.0.0.1
-      port: 6379
+      host: ${SPRING_DATA_REDIS_HOST:127.0.0.1}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
 
 minio:
   endpoint: ${MINIO_ENDPOINT:http://127.0.0.1:9000}
