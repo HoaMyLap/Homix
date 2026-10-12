@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { api } from '@/lib/api';
-import ThemeToggle from '@/components/ThemeToggle';
+import PublicHeader from '@/components/PublicHeader';
 import Sidebar from '@/components/Sidebar';
 import { useLanguage } from '@/lib/i18n';
 import { 
@@ -38,7 +38,7 @@ const getWorkspaceGradient = (name: string) => {
 };
 
 export default function WorkspacesPage() {
-  const { t, language, setLanguage } = useLanguage();
+  const { t, language } = useLanguage();
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [loading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -112,47 +112,7 @@ export default function WorkspacesPage() {
         <div className="absolute top-0 right-0 w-[50%] h-[50%] rounded-full glow-orb-primary blur-[140px] pointer-events-none opacity-40" />
         <div className="absolute bottom-0 left-0 w-[50%] h-[50%] rounded-full glow-orb-accent blur-[140px] pointer-events-none opacity-30" />
 
-        {/* Navigation bar */}
-        <header className="sticky top-0 z-50 border-b border-border bg-header/80 backdrop-blur-md px-6 py-1 h-20 flex items-center">
-          <div className="max-w-6xl w-full mx-auto flex items-center justify-between">
-            <Link href="/" className="flex items-center">
-              <img src="/logo2.png" alt="Logo" style={{ transform: 'scale(1.3)', transformOrigin: 'left center' }} className="h-18 w-auto object-contain" />
-            </Link>
-
-            <div className="flex items-center gap-6">
-              <Link href="/features" className="text-sm font-semibold text-secondary hover:text-primary transition-all">
-                {t('features')}
-              </Link>
-              <Link href="/pricing" className="text-sm font-semibold text-secondary hover:text-primary transition-all">
-                {t('pricing')}
-              </Link>
-              <Link href="/terms" className="text-sm font-semibold text-secondary hover:text-primary transition-all font-sans">
-                {t('terms')}
-              </Link>
-              <Link href="/contact" className="text-sm font-semibold text-secondary hover:text-primary transition-all">
-                {t('contact')}
-              </Link>
-
-              {/* Language Selector Pill */}
-              <button
-                type="button"
-                onClick={() => setLanguage(language === 'vi' ? 'en' : 'vi')}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-surface hover:border-primary/40 text-xs font-bold text-heading transition-all shadow-sm"
-                title="Đổi ngôn ngữ / Change language"
-              >
-                <span>{language === 'vi' ? '🇻🇳 VI' : '🇬🇧 EN'}</span>
-              </button>
-
-              <ThemeToggle />
-              <Link href="/login" className="text-sm font-semibold text-secondary hover:text-primary transition-all">
-                {t('login')}
-              </Link>
-              <Link href="/register" className="ui-btn-primary px-4 py-2 text-sm shadow-md shadow-primary/10">
-                {t('startFree')}
-              </Link>
-            </div>
-          </div>
-        </header>
+        <PublicHeader />
 
         {/* Hero Section */}
         <section className="max-w-5xl mx-auto px-6 pt-20 pb-16 text-center relative z-10">
@@ -367,7 +327,7 @@ export default function WorkspacesPage() {
       <Sidebar />
 
       <div className="flex-1 flex flex-col min-w-0 h-screen relative z-10 overflow-y-auto">
-        <main className="max-w-6xl w-full mx-auto px-6 mt-10 pb-12">
+        <main className="max-w-6xl w-full mx-auto px-6 mt-16 md:mt-10 pb-12">
           {/* Header Banner */}
           <div className="glass p-6 md:p-8 rounded-3xl border border-border shadow-xl mb-8 relative overflow-hidden">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">

@@ -227,7 +227,7 @@ export default function ProfilePage() {
       <Sidebar />
 
       <div className="flex-1 flex flex-col min-w-0 h-screen relative z-10 overflow-y-auto pb-12">
-        <div className="max-w-5xl w-full mx-auto px-6 mt-6">
+        <div className="max-w-5xl w-full mx-auto pl-16 pr-6 md:px-6 mt-6">
           <button
             onClick={() => router.back()}
             className="flex items-center gap-2 text-secondary hover:text-foreground transition-colors text-xs font-semibold"
@@ -252,7 +252,7 @@ export default function ProfilePage() {
               </p>
             </div>
 
-            <div className="flex items-center gap-3 shrink-0">
+            <div className="flex flex-wrap items-center gap-3 shrink-0">
               {systemRole === 'ADMIN' && (
                 <Link 
                   href="/admin" 
@@ -275,22 +275,22 @@ export default function ProfilePage() {
           {/* Section 1: VIP Subscription Banner Card */}
           <div className={`p-6 rounded-3xl border shadow-xl relative overflow-hidden transition-all ${
             subscriptionPlan === 'ENTERPRISE'
-              ? 'bg-gradient-to-r from-purple-950 via-indigo-950 to-zinc-950 border-purple-500/40 text-purple-200'
+              ? 'bg-gradient-to-r from-purple-950 via-indigo-950 to-slate-950 border-purple-500/40 text-purple-100'
               : subscriptionPlan === 'PRO'
-              ? 'bg-gradient-to-r from-amber-950/80 via-zinc-950 to-blue-950/80 border-amber-500/40 text-amber-200'
+              ? 'bg-gradient-to-r from-amber-950/90 via-slate-950 to-blue-950/90 border-amber-500/40 text-amber-100'
               : 'glass border-border text-secondary'
           }`}>
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative z-10">
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <Award className={`h-6 w-6 ${subscriptionPlan === 'FREE' ? 'text-secondary' : 'text-amber-400'}`} />
-                  <span className="text-xs uppercase font-bold tracking-wider text-muted">
+                  <span className={`text-xs uppercase font-bold tracking-wider ${subscriptionPlan === 'FREE' ? 'text-muted' : 'text-white/75'}`}>
                     {language === 'vi' ? 'Trạng thái Gói dịch vụ hiện tại' : 'Current Subscription Plan Status'}
                   </span>
                 </div>
                 
                 <div className="flex items-center gap-3">
-                  <h2 className="text-3xl font-black font-display text-heading uppercase tracking-wide flex items-center gap-2">
+                  <h2 className={`text-3xl font-black font-display uppercase tracking-wide flex items-center gap-2 ${subscriptionPlan === 'FREE' ? 'text-heading' : 'text-white'}`}>
                     {subscriptionPlan} PLAN
                   </h2>
 
@@ -306,7 +306,7 @@ export default function ProfilePage() {
                   )}
                 </div>
 
-                <p className="text-xs text-secondary max-w-xl leading-relaxed">
+                <p className={`text-xs max-w-xl leading-relaxed ${subscriptionPlan === 'FREE' ? 'text-secondary' : 'text-white/85'}`}>
                   {subscriptionPlan === 'ENTERPRISE'
                     ? (language === 'vi' ? 'Bạn đang sở hữu gói Cao cấp nhất với toàn bộ tính năng AI, lưu trữ không giới hạn và hỗ trợ ưu tiên 24/7.' : 'You own the highest Enterprise tier with full AI capabilities, unlimited storage, and 24/7 priority support.')
                     : subscriptionPlan === 'PRO'
@@ -317,16 +317,16 @@ export default function ProfilePage() {
 
               {/* Expiration Card */}
               {subscriptionPlan !== 'FREE' && (
-                <div className="p-4 rounded-2xl bg-black/40 border border-white/10 space-y-3 text-xs shrink-0 w-full md:w-64 shadow-inner">
+                <div className="p-4 rounded-2xl bg-black/40 border border-white/15 space-y-3 text-xs shrink-0 w-full md:w-64 shadow-inner text-white">
                   <div className="space-y-1">
-                    <div className="flex justify-between items-center text-muted text-[11px]">
+                    <div className="flex justify-between items-center text-white/75 text-[11px]">
                       <span>{language === 'vi' ? 'Hạn sử dụng gói:' : 'Plan Expiration:'}</span>
                       <Clock className="h-3.5 w-3.5 text-amber-400" />
                     </div>
-                    <div className="text-lg font-bold font-mono text-heading">
+                    <div className="text-lg font-bold font-mono text-white">
                       {formatDate(subscriptionExpiresAt)}
                     </div>
-                    <div className="flex items-center justify-between text-[11px] pt-1 border-t border-white/10">
+                    <div className="flex items-center justify-between text-[11px] pt-1 border-t border-white/10 text-white/85">
                       <span>{language === 'vi' ? 'Thời gian còn lại:' : 'Days Remaining:'}</span>
                       <strong className="text-emerald-400 font-bold">{daysLeft} {language === 'vi' ? 'ngày' : 'days'}</strong>
                     </div>
@@ -335,7 +335,7 @@ export default function ProfilePage() {
                   <div className="pt-2 border-t border-white/10 flex flex-col gap-2">
                     <Link
                       href="/pricing"
-                      className="w-full py-2 px-3 rounded-xl bg-primary hover:bg-primary-dark text-white font-bold text-xs flex items-center justify-center gap-1.5 no-underline transition-colors"
+                      className="w-full py-2 px-3 rounded-xl bg-primary hover:bg-primary-hover text-white font-bold text-xs flex items-center justify-center gap-1.5 no-underline transition-colors"
                     >
                       <Zap className="h-3.5 w-3.5" />
                       <span>{language === 'vi' ? 'Đổi gói dịch vụ' : 'Change Plan'}</span>
@@ -344,7 +344,7 @@ export default function ProfilePage() {
                     <button
                       type="button"
                       onClick={handleCancelSubscription}
-                      className="w-full py-1.5 px-3 rounded-xl bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white border border-rose-500/30 text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                      className="w-full py-1.5 px-3 rounded-xl bg-rose-500/15 text-rose-300 hover:bg-rose-500 hover:text-white border border-rose-500/30 text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
                     >
                       <span>{language === 'vi' ? 'Hủy gói đăng ký' : 'Cancel Subscription'}</span>
                     </button>

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import ThemeToggle from '@/components/ThemeToggle';
+import PublicHeader from '@/components/PublicHeader';
 import Sidebar from '@/components/Sidebar';
 import { useLanguage } from '@/lib/i18n';
 import { Shield, Lock, FileText, ArrowRight, Sparkles } from 'lucide-react';
@@ -132,7 +132,7 @@ export default function TermsPage() {
         
         <Sidebar />
 
-        <div className="flex-1 flex flex-col min-w-0 h-screen relative z-10 overflow-y-auto px-6 py-8 md:px-12 pb-12">
+        <div className="flex-1 flex flex-col min-w-0 h-screen relative z-10 overflow-y-auto px-6 pt-16 pb-12 md:py-8 md:px-12">
           {renderTermsContent(false)}
         </div>
       </div>
@@ -146,35 +146,11 @@ export default function TermsPage() {
       <div className="absolute top-0 right-0 w-[50%] h-[50%] rounded-full glow-orb-primary blur-[140px] pointer-events-none opacity-35" />
       <div className="absolute bottom-0 left-0 w-[50%] h-[50%] rounded-full glow-orb-accent blur-[140px] pointer-events-none opacity-25" />
 
-      {/* Navigation bar */}
-      <header className="sticky top-0 z-50 border-b border-border bg-header/80 backdrop-blur-md px-6 py-1 h-20 flex items-center">
-        <div className="max-w-6xl w-full mx-auto flex items-center justify-between">
-          <Link href="/" className="flex items-center group">
-            <img src="/logo2.png" alt="Logo" style={{ transform: 'scale(1.3)', transformOrigin: 'left center' }} className="h-18 w-auto object-contain group-hover:scale-[1.02] transition-transform" />
-          </Link>
+      <PublicHeader />
 
-          <div className="flex items-center gap-6">
-            <Link href="/features" className="text-sm font-semibold text-secondary hover:text-primary transition-all">
-              Tính năng
-            </Link>
-            <Link href="/pricing" className="text-sm font-semibold text-secondary hover:text-primary transition-all">
-              Bảng giá
-            </Link>
-            <Link href="/terms" className="text-sm font-bold text-primary transition-all">
-              Điều khoản
-            </Link>
-            <Link href="/contact" className="text-sm font-semibold text-secondary hover:text-primary transition-all">
-              Liên hệ
-            </Link>
-            <ThemeToggle />
-            <Link href="/login" className="text-sm font-semibold text-secondary hover:text-primary transition-all">
-              Đăng nhập
-            </Link>
-          </div>
-        </div>
-      </header>
-
-      {renderTermsContent(true)}
+      <div className="px-6 pt-12">
+        {renderTermsContent(true)}
+      </div>
     </div>
   );
 }

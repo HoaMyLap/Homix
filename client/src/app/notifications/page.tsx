@@ -170,7 +170,7 @@ export default function NotificationsPage() {
       <Sidebar />
 
       <div className="flex-1 flex flex-col min-w-0 h-screen relative z-10 overflow-y-auto pb-12">
-        <div className="max-w-4xl w-full mx-auto px-6 mt-6 flex items-center justify-between">
+        <div className="max-w-4xl w-full mx-auto pl-16 pr-6 md:px-6 mt-6 flex items-center justify-between">
           <button
             onClick={() => router.back()}
             className="flex items-center gap-2 text-secondary hover:text-foreground transition-colors text-xs font-semibold"

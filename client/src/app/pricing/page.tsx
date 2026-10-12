@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Sidebar from '@/components/Sidebar';
-import ThemeToggle from '@/components/ThemeToggle';
+import PublicHeader from '@/components/PublicHeader';
 import { useLanguage } from '@/lib/i18n';
 import { 
   Check, Sparkles, Shield, Zap, ArrowRight, Star, HelpCircle, 
@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 
 export default function PricingPage() {
-  const { t, language, setLanguage } = useLanguage();
+  const { t, language } = useLanguage();
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('annual');
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [isLoggedIn] = useState(() => {
@@ -307,7 +307,7 @@ export default function PricingPage() {
       <div className="flex min-h-screen bg-background text-foreground font-sans">
         <Sidebar />
         <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
-          <main className="max-w-7xl mx-auto px-6 py-12 w-full">
+          <main className="max-w-7xl mx-auto px-6 pt-16 pb-12 md:py-12 w-full">
             {renderPricingContent()}
           </main>
         </div>
@@ -322,47 +322,7 @@ export default function PricingPage() {
       <div className="absolute top-0 right-0 w-[50%] h-[50%] rounded-full glow-orb-primary blur-[140px] pointer-events-none opacity-35" />
       <div className="absolute bottom-0 left-0 w-[50%] h-[50%] rounded-full glow-orb-accent blur-[140px] pointer-events-none opacity-25" />
 
-      {/* Navigation bar */}
-      <header className="sticky top-0 z-50 border-b border-border bg-header/80 backdrop-blur-md px-6 py-1 h-20 flex items-center">
-        <div className="max-w-6xl w-full mx-auto flex items-center justify-between">
-          <Link href="/" className="flex items-center group">
-            <img src="/logo2.png" alt="Logo" style={{ transform: 'scale(1.3)', transformOrigin: 'left center' }} className="h-18 w-auto object-contain group-hover:scale-[1.02] transition-transform" />
-          </Link>
-
-          <div className="flex items-center gap-6">
-            <Link href="/features" className="text-sm font-semibold text-secondary hover:text-primary transition-all">
-              {t('features')}
-            </Link>
-            <Link href="/pricing" className="text-sm font-bold text-primary transition-all">
-              {t('pricing')}
-            </Link>
-            <Link href="/terms" className="text-sm font-semibold text-secondary hover:text-primary transition-all font-sans">
-              {t('terms')}
-            </Link>
-            <Link href="/contact" className="text-sm font-semibold text-secondary hover:text-primary transition-all">
-              {t('contact')}
-            </Link>
-
-            {/* Language Selector Pill */}
-            <button
-              type="button"
-              onClick={() => setLanguage(language === 'vi' ? 'en' : 'vi')}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-surface hover:border-primary/40 text-xs font-bold text-heading transition-all shadow-sm cursor-pointer"
-              title="Đổi ngôn ngữ / Change language"
-            >
-              <span>{language === 'vi' ? '🇻🇳 VI' : '🇬🇧 EN'}</span>
-            </button>
-
-            <ThemeToggle />
-            <Link href="/login" className="text-sm font-semibold text-secondary hover:text-primary transition-all">
-              {t('login')}
-            </Link>
-            <Link href="/register" className="ui-btn-primary px-4 py-2 text-sm shadow-md shadow-primary/10">
-              {t('startFree')}
-            </Link>
-          </div>
-        </div>
-      </header>
+      <PublicHeader />
 
       <main className="max-w-7xl mx-auto px-6 py-12 w-full relative z-10">
         {renderPricingContent()}

@@ -12,7 +12,7 @@ import {
   Briefcase, Folder, ChevronRight, Home, Users, 
   LogOut, ChevronDown, 
   Bell, User, X, Check, ChevronLeft, ChevronRight as ChevronRightIcon, 
-  Zap, TrendingUp, MessageSquare, Shield
+  Zap, TrendingUp, MessageSquare, Shield, Menu
 } from 'lucide-react';
 
 interface Workspace {
@@ -53,6 +53,7 @@ export default function Sidebar() {
     }
     return false;
   });
+  const [mobileOpen, setMobileOpen] = useState(false);
   
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -62,7 +63,7 @@ export default function Sidebar() {
   const [fullname, setFullname] = useState('');
   const [email, setEmail] = useState('');
   const [userId, setUserId] = useState('');
-  const [systemRole] = useState('USER');
+  const [systemRole, setSystemRole] = useState('USER');
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [editFullname, setEditFullname] = useState('');
@@ -82,6 +83,10 @@ export default function Sidebar() {
   const userDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (notifRef.current && !notifRef.current.contains(event.target as Node)) {
         setShowNotifDropdown(false);
@@ -90,9 +95,20 @@ export default function Sidebar() {
         setShowUserDropdown(false);
       }
     };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setShowNotifDropdown(false);
+        setShowUserDropdown(false);
+        setShowProfileModal(false);
+        setSelectedConfirmNotif(null);
+        setMobileOpen(false);
+      }
+    };
     document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
 
@@ -172,6 +188,8 @@ export default function Sidebar() {
 
     setFullname(localStorage.getItem('fullname') || 'User');
     setEmail(localStorage.getItem('email') || 'user@example.com');
+    const storedRole = localStorage.getItem('systemRole');
+    if (storedRole) setSystemRole(storedRole);
     const storedUserId = localStorage.getItem('userId') || '';
     setUserId(storedUserId);
 
@@ -182,6 +200,10 @@ export default function Sidebar() {
       setEditAvatarUrl(user.avatarUrl || '');
       localStorage.setItem('fullname', user.fullname);
       if (user.email) setEmail(user.email);
+      if (user.systemRole) {
+        setSystemRole(user.systemRole);
+        localStorage.setItem('systemRole', user.systemRole);
+      }
     }).catch(console.error);
 
     loadSidebarData();
@@ -331,15 +353,50 @@ export default function Sidebar() {
 
   return (
     <>
-      <aside 
-        className={`h-screen sticky top-0 bg-header backdrop-blur-md border-r border-border flex flex-col justify-between shrink-0 font-sans z-30 select-none transition-all duration-300 ease-in-out relative ${
-          isCollapsed ? 'w-16' : 'w-64'
+      {/* Mobile Hamburger Toggle */}
+      <button
+        type="button"
+        onClick={() => setMobileOpen(true)}
+        aria-label={language === 'vi' ? 'Mở thanh điều hướng' : 'Open navigation menu'}
+        className={`md:hidden fixed top-3.5 left-3.5 z-40 h-10 w-10 rounded-xl bg-header/90 backdrop-blur-md border border-border text-foreground flex items-center justify-center shadow-lg transition-all ${
+          mobileOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'
         }`}
       >
-      {/* Collapse/Expand Toggle Button */}
+        <Menu className="w-5 h-5" />
+      </button>
+
+      {/* Mobile Backdrop */}
+      {mobileOpen && (
+        <div
+          onClick={() => setMobileOpen(false)}
+          className="md:hidden fixed inset-0 bg-black/50 backdrop-blur-xs z-30 animate-fadeIn"
+          aria-hidden="true"
+        />
+      )}
+
+      <aside 
+        className={`h-screen fixed md:sticky top-0 left-0 bg-header backdrop-blur-md border-r border-border flex flex-col justify-between shrink-0 font-sans z-40 md:z-30 select-none transition-all duration-300 ease-in-out ${
+          mobileOpen ? 'translate-x-0 w-64' : '-translate-x-full md:translate-x-0'
+        } ${
+          isCollapsed ? 'md:w-16' : 'md:w-64'
+        }`}
+      >
+      {/* Mobile Close Button */}
       <button
+        type="button"
+        onClick={() => setMobileOpen(false)}
+        aria-label={language === 'vi' ? 'Đóng thanh điều hướng' : 'Close navigation menu'}
+        className="md:hidden absolute top-4 right-3 h-8 w-8 rounded-lg border border-border bg-surface text-secondary hover:text-foreground flex items-center justify-center z-50"
+      >
+        <X className="w-4 h-4" />
+      </button>
+
+      {/* Desktop Collapse/Expand Toggle Button */}
+      <button
+        type="button"
         onClick={toggleCollapse}
-        className="absolute top-5 -right-3 h-6 w-6 rounded-full border border-border bg-header text-secondary hover:text-primary hover:border-primary/40 flex items-center justify-center shadow-md cursor-pointer z-50 transition-transform active:scale-95"
+        aria-label={isCollapsed ? 'Mở rộng thanh menu' : 'Thu gọn thanh menu'}
+        className="hidden md:flex absolute top-5 -right-3 h-6 w-6 rounded-full border border-border bg-header text-secondary hover:text-primary hover:border-primary/40 items-center justify-center shadow-md cursor-pointer z-50 transition-transform active:scale-95"
         title={isCollapsed ? 'Mở rộng thanh menu' : 'Thu gọn thanh menu'}
       >
         {isCollapsed ? <ChevronRightIcon className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
@@ -351,7 +408,7 @@ export default function Sidebar() {
         <div className={`border-b border-border flex items-center justify-center overflow-hidden ${isCollapsed ? 'p-3 h-16' : 'p-2 h-24'}`}>
           <img 
             src={isCollapsed ? "/minilogo.png" : "/logo2.png"} 
-            alt="Logo" 
+            alt="Homix Logo" 
             style={{ transform: 'scale(1.3)' }}
             className={`object-contain transition-all duration-300 ${
               isCollapsed ? 'h-10 w-10' : 'w-[75%] h-full max-h-20'
@@ -364,18 +421,18 @@ export default function Sidebar() {
           <div className="p-3 border-b border-border/80 bg-amber-500/5">
             <Link
               href="/admin"
-              className={`w-full flex items-center gap-2.5 p-2.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-amber-600/15 to-indigo-600/20 border border-amber-500/40 text-amber-400 font-bold hover:from-amber-500/30 hover:to-indigo-600/30 transition-all shadow-md no-underline ${
+              className={`w-full flex items-center gap-2.5 p-2.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-amber-600/15 to-indigo-600/20 border border-amber-500/40 text-amber-500 dark:text-amber-400 font-bold hover:from-amber-500/30 hover:to-indigo-600/30 transition-all shadow-md no-underline ${
                 isCollapsed ? 'justify-center p-2' : ''
               }`}
               title={language === 'vi' ? 'Quay lại Trang Admin Hệ Thống' : 'Return to System Admin Portal'}
             >
-              <Shield className="w-5 h-5 text-amber-400 shrink-0 animate-pulse" />
+              <Shield className="w-5 h-5 text-amber-500 dark:text-amber-400 shrink-0 animate-pulse" />
               {!isCollapsed && (
                 <div className="min-w-0 flex-1">
-                  <div className="text-xs font-bold truncate text-amber-400 flex items-center gap-1">
+                  <div className="text-xs font-bold truncate text-amber-600 dark:text-amber-400 flex items-center gap-1">
                     <span>{language === 'vi' ? 'Admin Hệ Thống' : 'System Admin'}</span>
                   </div>
-                  <div className="text-[10px] text-amber-300/80 font-normal truncate">
+                  <div className="text-[10px] text-amber-600/80 dark:text-amber-300/80 font-normal truncate">
                     {language === 'vi' ? 'Chuyển về Admin ➔' : 'Return to Console ➔'}
                   </div>
                 </div>
@@ -387,7 +444,7 @@ export default function Sidebar() {
         {/* Informational Pages Navigation Menu */}
         <div className="p-3 space-y-1">
           {!isCollapsed && (
-            <div className="text-[9px] font-bold text-muted uppercase tracking-wider px-3 mb-1">
+            <div className="text-[10px] font-bold text-muted uppercase tracking-wider px-3 mb-1">
               {language === 'vi' ? 'Liên kết chính' : 'Main Links'}
             </div>
           )}
@@ -416,7 +473,7 @@ export default function Sidebar() {
         {/* Workspaces list */}
         <div className="px-3 py-2 flex-1 border-t border-border-subtle mt-2">
           {!isCollapsed && (
-            <div className="flex items-center justify-between text-[9px] font-bold text-muted uppercase tracking-wider px-3 mb-2">
+            <div className="flex items-center justify-between text-[10px] font-bold text-muted uppercase tracking-wider px-3 mb-2">
               <span>{t('workspace')}</span>
             </div>
           )}
@@ -443,14 +500,14 @@ export default function Sidebar() {
               </Link>
             ))}
             {workspaces.length === 0 && !loading && !isCollapsed && (
-              <span className="text-[10px] text-muted px-3 block">{t('noWorkspace')}</span>
+              <span className="text-[11px] text-muted px-3 block">{t('noWorkspace')}</span>
             )}
           </div>
 
           {/* Sibling Projects list */}
           {currentWorkspace && !isCollapsed && (
             <div className="mt-4 pt-3 border-t border-border-subtle">
-              <div className="flex items-center justify-between text-[9px] font-bold text-muted uppercase tracking-wider px-3 mb-2">
+              <div className="flex items-center justify-between text-[10px] font-bold text-muted uppercase tracking-wider px-3 mb-2">
                 <span className="truncate">{t('subProjectsHeader')} {currentWorkspace.name}</span>
               </div>
               <div className="space-y-1 max-h-36 overflow-y-auto">
@@ -469,7 +526,7 @@ export default function Sidebar() {
                   </Link>
                 ))}
                 {projects.length === 0 && !loading && (
-                  <span className="text-[10px] text-muted px-3 block">{t('noProjectsInWs')}</span>
+                  <span className="text-[11px] text-muted px-3 block">{t('noProjectsInWs')}</span>
                 )}
               </div>
             </div>
@@ -488,6 +545,7 @@ export default function Sidebar() {
           <button
             type="button"
             onClick={() => setLanguage(language === 'vi' ? 'en' : 'vi')}
+            aria-label={language === 'vi' ? 'Chuyển sang Tiếng Anh' : 'Switch to Vietnamese'}
             className="p-1.5 rounded-xl bg-surface border border-border text-xs font-bold flex items-center gap-1 hover:border-primary/40 transition-all text-foreground cursor-pointer shadow-sm"
             title={language === 'vi' ? 'Chuyển sang Tiếng Anh (English)' : 'Switch to Vietnamese (Tiếng Việt)'}
           >
@@ -501,16 +559,18 @@ export default function Sidebar() {
           {/* Collapsible Bell notifications trigger */}
           <div className="relative" ref={notifRef}>
             <button
+              type="button"
               onClick={() => {
                 setShowNotifDropdown(!showNotifDropdown);
                 setShowUserDropdown(false);
               }}
+              aria-label="Thông báo hệ thống"
               className="ui-btn-ghost p-2 relative flex items-center justify-center shrink-0"
               title="Thông báo hệ thống"
             >
               <Bell className="w-5 h-5 shrink-0 text-secondary hover:text-primary transition-colors" />
               {unreadCount > 0 && (
-                <span className="absolute top-1.5 right-1.5 h-3.5 w-3.5 bg-error rounded-full text-[8px] font-bold flex items-center justify-center text-primary-foreground">
+                <span className="absolute top-1.5 right-1.5 h-4 min-w-4 px-1 bg-error rounded-full text-[9px] font-bold flex items-center justify-center text-primary-foreground">
                   {unreadCount}
                 </span>
               )}
@@ -518,15 +578,15 @@ export default function Sidebar() {
 
             {/* Notifications Dropdown inside sidebar */}
             {showNotifDropdown && (
-              <div className={`absolute bottom-12 mt-0 w-72 glass border border-border rounded-2xl p-4 shadow-2xl z-50 ${
-                isCollapsed ? 'left-6' : 'left-0'
+              <div className={`fixed md:absolute bottom-16 md:bottom-12 left-3 md:mt-0 w-[min(18rem,calc(100vw-1.5rem))] glass border border-border rounded-2xl p-4 shadow-2xl z-50 ${
+                isCollapsed ? 'md:left-10' : 'md:left-0'
               }`}>
                 <div className="flex items-center justify-between border-b border-border-subtle pb-3.5 mb-3">
                   <span className="font-bold text-xs text-heading">{t('notifications')}</span>
                   {unreadCount > 0 && (
                     <button
                       onClick={handleMarkAllAsRead}
-                      className="text-[9px] text-primary hover:underline font-bold bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20"
+                      className="text-[10px] text-primary hover:underline font-bold bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20"
                     >
                       {t('markAllRead')} ({unreadCount})
                     </button>

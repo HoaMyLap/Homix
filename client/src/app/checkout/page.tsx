@@ -522,7 +522,7 @@ function CheckoutContent() {
                     )}
                   </p>
                   <div className="pt-1">
-                    <Link href="/workspace" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white font-bold text-xs no-underline shadow-lg shadow-emerald-500/25 transition-all">
+                    <Link href="/" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white font-bold text-xs no-underline shadow-lg shadow-emerald-500/25 transition-all">
                       <span>{language === 'vi' ? 'Truy cập Workspace của bạn ngay' : 'Access Your Workspace Now'}</span> ➔
                     </Link>
                   </div>

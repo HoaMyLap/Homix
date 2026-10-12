@@ -392,8 +392,8 @@ export default function ChatWidget({
       {/* Solid Chat Drawer Panel */}
       {activeIsOpen && (
         <div 
-          className={`fixed bottom-24 right-6 max-w-[calc(100vw-32px)] max-h-[calc(100vh-120px)] z-50 shadow-2xl rounded-3xl overflow-hidden flex flex-col animate-in slide-in-from-bottom duration-300 border bg-[#f4f2f7] dark:bg-[#0e0c14] border-[#e1dbe9] dark:border-[#221c2e] ${
-            activeIsExpanded ? 'w-[850px] max-w-[85vw] h-[750px] max-h-[85vh]' : 'w-[380px] h-[550px]'
+          className={`fixed bottom-24 right-4 sm:right-6 max-w-[calc(100vw-2rem)] max-h-[calc(100vh-120px)] z-50 shadow-2xl rounded-3xl overflow-hidden flex flex-col animate-in slide-in-from-bottom duration-300 border bg-[#f4f2f7] dark:bg-[#0e0c14] border-[#e1dbe9] dark:border-[#221c2e] ${
+            activeIsExpanded ? 'w-[850px] sm:max-w-[85vw] h-[750px] max-h-[85vh]' : 'w-[calc(100vw-2rem)] sm:w-[380px] h-[550px]'
           } transition-all duration-300`}
         >
           {/* Header */}
@@ -415,7 +415,9 @@ export default function ChatWidget({
             <div className="flex items-center gap-1.5">
               {/* Sound Toggle Button */}
               <button
+                type="button"
                 onClick={toggleSound}
+                aria-label={soundEnabled ? 'Tắt âm thanh' : 'Bật âm thanh'}
                 className="p-1.5 rounded-full hover:bg-[#dbd3e3] dark:hover:bg-[#252033] text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 transition-all border-0 bg-transparent cursor-pointer"
                 title={soundEnabled ? 'Tắt âm thanh' : 'Bật âm thanh'}
               >
@@ -424,7 +426,9 @@ export default function ChatWidget({
 
               {/* Maximize / Minimize Button */}
               <button
+                type="button"
                 onClick={toggleExpand}
+                aria-label={activeIsExpanded ? 'Thu nhỏ' : 'Phóng to'}
                 className="p-1.5 rounded-full hover:bg-[#dbd3e3] dark:hover:bg-[#252033] text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 transition-all border-0 bg-transparent cursor-pointer"
                 title={activeIsExpanded ? 'Thu nhỏ' : 'Phóng to'}
               >
@@ -433,7 +437,9 @@ export default function ChatWidget({
               
               {/* Close Button */}
               <button
+                type="button"
                 onClick={toggleChat}
+                aria-label="Đóng khung chat"
                 className="p-1.5 rounded-full hover:bg-[#dbd3e3] dark:hover:bg-[#252033] text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 transition-all border-0 bg-transparent cursor-pointer"
               >
                 <X className="h-4.5 w-4.5" />
@@ -451,8 +457,8 @@ export default function ChatWidget({
             ) : messages.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center p-6 text-zinc-400 dark:text-zinc-500 text-xs">
                 <ChatIcon className="h-10 w-10 opacity-40 mb-3" />
-                <p className="font-bold text-zinc-650 dark:text-zinc-350">Bắt đầu cuộc trò chuyện!</p>
-                <p className="text-[10px] mt-1 opacity-70">
+                <p className="font-bold text-zinc-700 dark:text-zinc-300">Bắt đầu cuộc trò chuyện!</p>
+                <p className="text-[11px] mt-1 opacity-70">
                   Mọi tin nhắn gửi trong phòng này đều bảo mật và đồng bộ realtime.
                 </p>
               </div>
@@ -476,7 +482,7 @@ export default function ChatWidget({
                     {/* Bubble */}
                     <div className="max-w-[70%] flex flex-col gap-0.5">
                       {!isMe && (
-                        <span className="text-[9px] font-extrabold px-1 truncate text-zinc-600 dark:text-zinc-400">
+                        <span className="text-[10px] font-extrabold px-1 truncate text-zinc-600 dark:text-zinc-400">
                           {msg.senderName}
                         </span>
                       )}
@@ -489,8 +495,8 @@ export default function ChatWidget({
                       >
                         {renderMessageContent(msg.content)}
                       </div>
-                      <span className={`text-[8px] px-1.5 flex items-center gap-0.5 mt-0.5 text-zinc-500 dark:text-zinc-500 ${isMe ? 'justify-end' : ''}`}>
-                        <Clock className="h-2 w-2" />
+                      <span className={`text-[10px] px-1.5 flex items-center gap-0.5 mt-0.5 text-zinc-500 dark:text-zinc-500 ${isMe ? 'justify-end' : ''}`}>
+                        <Clock className="h-2.5 w-2.5" />
                         {formatMessageTime(msg.createdAt)}
                       </span>
                     </div>
@@ -509,7 +515,8 @@ export default function ChatWidget({
                 <button
                   type="button"
                   onClick={() => setShowAttachMenu(!showAttachMenu)}
-                  className="h-8.5 w-8.5 rounded-xl bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-650 dark:text-zinc-300 flex items-center justify-center shrink-0 border-0 cursor-pointer transition-all"
+                  aria-label="Đính kèm tài liệu hoặc hình ảnh"
+                  className="h-8.5 w-8.5 rounded-xl bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 flex items-center justify-center shrink-0 border-0 cursor-pointer transition-all"
                   title="Đính kèm tài liệu/hình ảnh"
                 >
                   <Paperclip className="h-4 w-4" />

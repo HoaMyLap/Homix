@@ -311,7 +311,7 @@ export function TaskDiscussionList({
                   e.stopPropagation();
                   onViewLikes(comment.id);
                 }}
-                className="hover:underline hover:text-foreground font-semibold px-1.5 py-0.5 bg-surface-hover rounded"
+                className="hover:underline hover:text-foreground font-semibold px-1.5 py-0.5 bg-hover rounded"
                 title="Xem những người đã thích"
               >
                 ({likesCount})
@@ -425,7 +425,7 @@ export function TaskDiscussionFooter({
   return (
     <div className="shrink-0 border-t border-border px-6 py-4 bg-card/95 backdrop-blur-sm z-10">
       {!canCreateComment ? (
-        <div className="p-3 bg-zinc-900/60 border border-border/80 text-xs text-muted text-center rounded-xl">
+        <div className="p-3 bg-surface/60 border border-border/80 text-xs text-muted text-center rounded-xl">
           {language === 'vi'
             ? '🔒 Bạn không có quyền bình luận trong công việc này.'
             : '🔒 You do not have permission to comment in this task.'}
@@ -439,7 +439,8 @@ export function TaskDiscussionFooter({
             <button
               type="button"
               onClick={() => setCommentShowAttachMenu(!commentShowAttachMenu)}
-              className="h-9 w-9 rounded-xl bg-zinc-200 hover:bg-zinc-350 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-650 dark:text-zinc-300 flex items-center justify-center shrink-0 border-0 cursor-pointer transition-all"
+              aria-label="Đính kèm tài liệu hoặc hình ảnh"
+              className="h-9 w-9 rounded-xl bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 flex items-center justify-center shrink-0 border-0 cursor-pointer transition-all"
               title="Đính kèm tài liệu/hình ảnh"
             >
               <Paperclip className="h-4 w-4" />

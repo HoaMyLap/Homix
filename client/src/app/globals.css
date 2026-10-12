@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *, :root:not([data-theme=light]), :root:not([data-theme=light]) *));
 
 /* ==========================================================================
    DESIGN TOKENS — Dark Mode (default)
@@ -85,6 +85,7 @@
   --zinc-400: var(--text-secondary);
   --zinc-500: var(--text-muted);
   --zinc-600: var(--text-disabled);
+  --zinc-700: #30363d;
   --zinc-800: var(--border);
   --zinc-850: #1a1f26;
   --zinc-900: var(--surface);
@@ -171,6 +172,7 @@ html[data-theme="light"] {
   --zinc-400: var(--text-secondary);
   --zinc-500: var(--text-muted);
   --zinc-600: var(--text-disabled);
+  --zinc-700: #cbd5e1;
   --zinc-800: var(--border);
   --zinc-850: #dce1e9;
   --zinc-900: var(--surface);
@@ -232,8 +234,9 @@ html[data-theme="light"] {
   --color-violet-500: var(--primary);
   --color-violet-600: var(--primary-hover);
   --color-violet-400: var(--primary);
-  --font-sans: 'Plus Jakarta Sans', sans-serif;
-  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-sans: var(--font-jakarta-sans), 'Plus Jakarta Sans', sans-serif;
+  --font-display: var(--font-jakarta-sans), 'Plus Jakarta Sans', sans-serif;
+  --font-mono: var(--font-mono), monospace;
   --font-size-xs: 0.8125rem;
   --font-size-sm: 0.9375rem;
   --font-size-base: 1.0625rem;
@@ -246,9 +249,18 @@ html[data-theme="light"] {
 /* ==========================================================================
    Base styles
    ========================================================================== */
-*,
-*::before,
-*::after {
+body,
+aside,
+header,
+main,
+.glass,
+.ui-drawer,
+.ui-input,
+.ui-textarea,
+.ui-select,
+.ui-btn-primary,
+.ui-btn-secondary,
+.ui-btn-ghost {
   transition: var(--theme-transition);
 }
 
@@ -256,12 +268,8 @@ body {
   background: var(--bg-gradient);
   background-attachment: fixed;
   color: var(--foreground);
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--font-jakarta-sans), 'Plus Jakarta Sans', sans-serif;
   overflow-x: hidden;
-}
-
-html[data-theme="light"] body {
-  font-weight: 500;
 }
 
 .min-h-screen.bg-background,
@@ -388,6 +396,18 @@ main .glass .glass:hover {
   border-radius: 0.75rem;
   color: var(--foreground);
   transition: var(--theme-transition);
+}
+
+.ui-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-muted);
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
 .ui-label {

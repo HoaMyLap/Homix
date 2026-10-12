@@ -11,7 +11,7 @@ import {
   Search, Filter, RefreshCw, 
   Sparkles, Edit3, Check, X,
   TrendingUp, Server, Database, HardDrive, Layers,
-  LogOut, Home, BarChart3, Download
+  LogOut, Home, BarChart3, Download, Menu
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 
@@ -67,6 +67,7 @@ export default function StandaloneAdminPortal() {
 
   // Active Admin View Section
   const [activeSection, setActiveSection] = useState<'OVERVIEW' | 'USERS' | 'PAYMENTS' | 'SYSTEM'>('OVERVIEW');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Search & Filter state
   const [searchUserQuery, setSearchUserQuery] = useState('');
@@ -334,33 +335,52 @@ export default function StandaloneAdminPortal() {
       {/* ========================================================================= */}
       {/* 1. DEDICATED SYSTEM ADMIN SIDEBAR */}
       {/* ========================================================================= */}
-      <aside className="w-64 h-screen bg-surface/90 backdrop-blur-xl border-r border-border flex flex-col justify-between shrink-0 z-30 select-none">
+      {mobileMenuOpen && (
+        <div
+          onClick={() => setMobileMenuOpen(false)}
+          className="md:hidden fixed inset-0 bg-black/50 backdrop-blur-xs z-30 animate-fadeIn"
+          aria-hidden="true"
+        />
+      )}
+      <aside className={`w-64 h-screen fixed md:static inset-y-0 left-0 bg-surface/95 md:bg-surface/90 backdrop-blur-xl border-r border-border flex flex-col justify-between shrink-0 z-40 md:z-30 select-none transition-transform duration-300 ${
+        mobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+      }`}>
         <div>
           {/* Admin Portal Brand Header with Mini Logo */}
-          <div className="p-4 border-b border-border flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-surface-elevated border border-border flex items-center justify-center shadow-md shrink-0 p-1">
-              <img src="/minilogo.png" alt="Homix Admin Logo" className="w-full h-full object-contain" />
-            </div>
-            <div>
-              <div className="flex items-center gap-1.5">
-                <h1 className="font-black font-display text-sm tracking-wide text-heading">HOMIX ADMIN</h1>
-                <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 uppercase">PRO</span>
+          <div className="p-4 border-b border-border flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-surface-elevated border border-border flex items-center justify-center shadow-md shrink-0 p-1">
+                <img src="/minilogo.png" alt="Homix Admin Logo" className="w-full h-full object-contain" />
               </div>
-              <p className="text-[10px] text-emerald-400 font-mono flex items-center gap-1 mt-0.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                {language === 'vi' ? 'Hệ Thống Sẵn Sàng' : 'System Online'}
-              </p>
+              <div>
+                <div className="flex items-center gap-1.5">
+                  <h1 className="font-black font-display text-sm tracking-wide text-heading">HOMIX ADMIN</h1>
+                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-500 dark:text-amber-400 border border-amber-500/30 uppercase">PRO</span>
+                </div>
+                <p className="text-[10px] text-emerald-500 dark:text-emerald-400 font-mono flex items-center gap-1 mt-0.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  {language === 'vi' ? 'Hệ Thống Sẵn Sàng' : 'System Online'}
+                </p>
+              </div>
             </div>
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(false)}
+              aria-label="Close menu"
+              className="md:hidden p-1.5 rounded-lg border border-border bg-surface text-secondary hover:text-foreground"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </div>
 
           {/* System Navigation Menu */}
           <div className="p-4 space-y-1.5">
-            <div className="text-[9px] font-bold text-muted uppercase tracking-wider px-3 mb-2">
+            <div className="text-[10px] font-bold text-muted uppercase tracking-wider px-3 mb-2">
               {language === 'vi' ? 'Quản Trị Hệ Thống' : 'System Console'}
             </div>
 
             <button
-              onClick={() => setActiveSection('OVERVIEW')}
+              onClick={() => { setActiveSection('OVERVIEW'); setMobileMenuOpen(false); }}
               className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all border-0 cursor-pointer text-left ${
                 activeSection === 'OVERVIEW'
                   ? 'bg-primary/15 text-primary border border-primary/30 shadow-md'
@@ -372,7 +392,7 @@ export default function StandaloneAdminPortal() {
             </button>
 
             <button
-              onClick={() => setActiveSection('USERS')}
+              onClick={() => { setActiveSection('USERS'); setMobileMenuOpen(false); }}
               className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all border-0 cursor-pointer text-left ${
                 activeSection === 'USERS'
                   ? 'bg-primary/15 text-primary border border-primary/30 shadow-md'
@@ -389,7 +409,7 @@ export default function StandaloneAdminPortal() {
             </button>
 
             <button
-              onClick={() => setActiveSection('PAYMENTS')}
+              onClick={() => { setActiveSection('PAYMENTS'); setMobileMenuOpen(false); }}
               className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all border-0 cursor-pointer text-left ${
                 activeSection === 'PAYMENTS'
                   ? 'bg-primary/15 text-primary border border-primary/30 shadow-md'
@@ -406,7 +426,7 @@ export default function StandaloneAdminPortal() {
             </button>
 
             <button
-              onClick={() => setActiveSection('SYSTEM')}
+              onClick={() => { setActiveSection('SYSTEM'); setMobileMenuOpen(false); }}
               className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all border-0 cursor-pointer text-left ${
                 activeSection === 'SYSTEM'
                   ? 'bg-primary/15 text-primary border border-primary/30 shadow-md'
@@ -462,10 +482,18 @@ export default function StandaloneAdminPortal() {
       {/* ========================================================================= */}
       <div className="flex-1 flex flex-col min-w-0 h-screen relative z-10 overflow-y-auto">
         {/* Dedicated Admin Top Header Bar */}
-        <header className="h-16 border-b border-border bg-header/60 backdrop-blur-md px-8 flex items-center justify-between sticky top-0 z-20 shrink-0">
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-mono text-muted uppercase tracking-widest">CONSOLE /</span>
-            <h2 className="text-sm font-bold font-display text-heading uppercase tracking-wider">
+        <header className="h-16 border-b border-border bg-header/60 backdrop-blur-md px-4 md:px-8 flex items-center justify-between sticky top-0 z-20 shrink-0 gap-2">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(true)}
+              aria-label="Open menu"
+              className="md:hidden p-2 rounded-xl border border-border bg-surface text-heading shrink-0"
+            >
+              <Menu className="w-4.5 h-4.5" />
+            </button>
+            <span className="hidden sm:inline text-xs font-mono text-muted uppercase tracking-widest shrink-0">CONSOLE /</span>
+            <h2 className="text-xs sm:text-sm font-bold font-display text-heading uppercase tracking-wider truncate">
               {activeSection === 'OVERVIEW' && (language === 'vi' ? 'Tổng Quan Báo Cáo Doanh Thu' : 'Revenue & Metrics Overview')}
               {activeSection === 'USERS' && (language === 'vi' ? 'Quản Lý Người Dùng & Gói VIP' : 'User Management & VIP Access')}
               {activeSection === 'PAYMENTS' && (language === 'vi' ? 'Nhật Ký Đơn Hàng Thanh Toán' : 'All Payment Transactions Log')}

@@ -916,7 +916,7 @@ export default function WorkspaceDetailPage() {
       <Sidebar />
 
       <div className="flex-1 flex flex-col min-w-0 h-screen relative z-10 overflow-y-auto pb-12">
-        <div className="max-w-6xl w-full mx-auto px-6 mt-6">
+        <div className="max-w-6xl w-full mx-auto pl-16 pr-6 md:px-6 mt-6">
           <Link href="/" className="flex items-center gap-2 text-secondary hover:text-foreground transition-colors text-xs font-semibold">
             <ArrowLeft className="h-4.5 w-4.5" />
             {t('backToWorkspaceList')}
@@ -945,7 +945,7 @@ export default function WorkspaceDetailPage() {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex items-center gap-3 shrink-0">
+              <div className="flex flex-wrap items-center gap-3 shrink-0">
                 {checkPermission('PROJECT_CREATE') && (
                   <button
                     onClick={() => setShowProjModal(true)}
@@ -1449,7 +1449,7 @@ export default function WorkspaceDetailPage() {
                           <select
                             value={m.roleId || m.role}
                             onChange={(e) => handleChangeMemberRoleWithCustom(m.userId, e.target.value)}
-                            className="bg-zinc-900 border border-zinc-800 text-[10px] font-bold text-primary rounded-lg px-2 py-1 focus:outline-none cursor-pointer"
+                            className="bg-surface border border-border text-[10px] font-bold text-primary rounded-lg px-2 py-1 focus:outline-none cursor-pointer"
                           >
                             <optgroup label="Hệ thống (Default)">
                               <option value="ADMIN">ADMIN</option>
@@ -1465,7 +1465,7 @@ export default function WorkspaceDetailPage() {
                             )}
                           </select>
                         ) : (
-                          <span className="text-[10px] font-bold text-zinc-400 uppercase bg-zinc-850 border border-zinc-700/50 px-2.5 py-1 rounded-lg">
+                          <span className="text-[10px] font-bold text-secondary uppercase bg-surface-elevated border border-border px-2.5 py-1 rounded-lg">
                             {(() => {
                               if (m.roleId) {
                                 const cr = customRoles.find((r) => r.id === m.roleId);
@@ -1619,9 +1619,9 @@ export default function WorkspaceDetailPage() {
                   <select
                     value={editProjStatus}
                     onChange={(e) => setEditProjStatus(e.target.value)}
-                    className="ui-input px-4 py-2.5 text-sm"
+                    className="ui-select px-4 py-2.5 text-sm"
                   >
-                    <option value="ACTIVE font-bold">ACTIVE (Đang hoạt động)</option>
+                    <option value="ACTIVE">ACTIVE (Đang hoạt động)</option>
                     <option value="COMPLETED">COMPLETED (Hoàn thành)</option>
                     <option value="ARCHIVED">ARCHIVED (Lưu trữ)</option>
                   </select>
@@ -1971,9 +1971,9 @@ export default function WorkspaceDetailPage() {
             </div>
 
             {/* Modal Content - Two Panel Layout */}
-            <div className="flex-1 flex overflow-hidden min-h-0">
+            <div className="flex-1 flex flex-col md:flex-row overflow-y-auto md:overflow-hidden min-h-0">
               {/* Left Panel: Roles List */}
-              <div className="w-1/3 border-r border-border/80 p-5 flex flex-col gap-4 overflow-y-auto">
+              <div className="w-full md:w-1/3 border-b md:border-b-0 md:border-r border-border/80 p-5 flex flex-col gap-4 overflow-y-auto">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-muted">
                     {language === 'vi' ? 'Danh sách vai trò' : 'Roles List'}
@@ -2032,7 +2032,7 @@ export default function WorkspaceDetailPage() {
               </div>
 
               {/* Right Panel: Role Creation / Editing Form */}
-              <div className="w-2/3 p-6 flex flex-col min-h-0 overflow-y-auto">
+              <div className="w-full md:w-2/3 p-6 flex flex-col min-h-0 overflow-y-auto">
                 <h4 className="text-sm font-extrabold text-zinc-100 mb-4 tracking-wide font-display border-b border-border/50 pb-2">
                   {selectedRole 
                     ? (language === 'vi' ? `Chỉnh sửa vai trò: ${selectedRole.name}` : `Edit Role: ${selectedRole.name}`) 
@@ -2167,7 +2167,7 @@ export default function WorkspaceDetailPage() {
                     return (
                       <div
                         key={perm.permission}
-                        className="flex items-center justify-between p-3.5 rounded-2xl border border-border/60 bg-surface/40 hover:bg-surface/60 transition-all text-xs gap-4"
+                        className="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 rounded-2xl border border-border/60 bg-surface/40 hover:bg-surface/60 transition-all text-xs gap-4"
                       >
                         <div className="min-w-0 flex-1">
                           <div className="font-extrabold text-zinc-200">{pDef?.label || perm.permission}</div>
@@ -2175,7 +2175,7 @@ export default function WorkspaceDetailPage() {
                         </div>
 
                         {/* Override Tri-State Switch */}
-                        <div className="flex items-center gap-1.5 bg-zinc-900 border border-zinc-800 p-1 rounded-xl shrink-0">
+                        <div className="flex items-center gap-1.5 bg-surface-elevated border border-border p-1 rounded-xl shrink-0">
                           <button
                             type="button"
                             onClick={() => {
@@ -2187,10 +2187,10 @@ export default function WorkspaceDetailPage() {
                                 )
                               );
                             }}
-                            className={`px-2.5 py-1 rounded-lg text-[9px] font-extrabold uppercase transition-all ${
+                            className={`px-2.5 py-1 rounded-lg text-[10px] font-extrabold uppercase transition-all ${
                               perm.inherited
-                                ? 'bg-zinc-800 text-zinc-300 font-bold'
-                                : 'text-zinc-500 hover:text-zinc-300'
+                                ? 'bg-primary/15 text-primary border border-primary/25 font-bold'
+                                : 'text-muted hover:text-foreground'
                             }`}
                           >
                             {language === 'vi' ? 'Kế thừa' : 'Inherit'}
@@ -2206,10 +2206,10 @@ export default function WorkspaceDetailPage() {
                                 )
                               );
                             }}
-                            className={`px-2.5 py-1 rounded-lg text-[9px] font-extrabold uppercase transition-all ${
+                            className={`px-2.5 py-1 rounded-lg text-[10px] font-extrabold uppercase transition-all ${
                               !perm.inherited && perm.allowed
-                                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 font-bold'
-                                : 'text-zinc-500 hover:text-zinc-300'
+                                ? 'bg-emerald-500/20 text-emerald-500 dark:text-emerald-400 border border-emerald-500/20 font-bold'
+                                : 'text-muted hover:text-foreground'
                             }`}
                           >
                             {language === 'vi' ? 'Cho phép' : 'Allow'}
@@ -2225,10 +2225,10 @@ export default function WorkspaceDetailPage() {
                                 )
                               );
                             }}
-                            className={`px-2.5 py-1 rounded-lg text-[9px] font-extrabold uppercase transition-all ${
+                            className={`px-2.5 py-1 rounded-lg text-[10px] font-extrabold uppercase transition-all ${
                               !perm.inherited && !perm.allowed
-                                ? 'bg-rose-500/20 text-rose-400 border border-rose-500/20 font-bold'
-                                : 'text-zinc-500 hover:text-zinc-300'
+                                ? 'bg-rose-500/20 text-rose-500 dark:text-rose-400 border border-rose-500/20 font-bold'
+                                : 'text-muted hover:text-foreground'
                             }`}
                           >
                             {language === 'vi' ? 'Từ chối' : 'Deny'}
@@ -2341,7 +2341,7 @@ export default function WorkspaceDetailPage() {
                           type="button"
                           disabled={approvalsLoading}
                           onClick={() => handleApproveDeletion(req.id)}
-                          className="px-4 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white rounded-xl transition-all shadow-md shadow-rose-955/30 flex items-center gap-1 border-0 cursor-pointer"
+                          className="px-4 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white transition-all shadow-md shadow-rose-950/30 flex items-center gap-1 border-0 cursor-pointer"
                         >
                           Phê duyệt xóa
                         </button>

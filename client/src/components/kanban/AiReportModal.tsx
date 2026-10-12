@@ -37,8 +37,10 @@ export default function AiReportModal({
   return (
     <div
       id="ai-report-side-panel"
-      className={`fixed inset-0 h-screen w-full bg-[#030014] z-50 flex flex-col transition-transform duration-300 ease-in-out ${
-        show ? 'translate-x-0' : 'translate-x-full'
+      role="dialog"
+      aria-modal="true"
+      className={`fixed inset-0 h-screen w-full bg-background z-50 flex flex-col transition-transform duration-300 ease-in-out ${
+        show ? 'translate-x-0' : 'translate-x-full pointer-events-none'
       }`}
     >
       {/* Style tag for print rules */}
@@ -132,20 +134,20 @@ export default function AiReportModal({
       />
 
       {/* Full Page Header */}
-      <div className="border-b border-zinc-800/80 bg-zinc-950/80 backdrop-blur-md no-print">
+      <div className="border-b border-border bg-header/90 backdrop-blur-md no-print">
         <div className="max-w-4xl mx-auto w-full flex items-center justify-between px-6 py-4">
           <button
             type="button"
             onClick={onClose}
-            className="flex items-center gap-1.5 px-3.5 py-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-zinc-300 rounded-xl text-xs font-semibold transition-all"
+            className="ui-btn-secondary flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold"
           >
             <ArrowLeft className="h-4 w-4" />
             Quay lại Dự án
           </button>
 
           <div className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-violet-400 animate-pulse" />
-            <h3 className="font-bold text-zinc-100 text-base font-display">
+            <Sparkles className="h-5 w-5 text-primary animate-pulse" />
+            <h3 className="font-bold text-heading text-sm sm:text-base font-display">
               Báo cáo & Dashboard tiến độ AI
             </h3>
           </div>
@@ -154,7 +156,7 @@ export default function AiReportModal({
             type="button"
             onClick={() => window.print()}
             disabled={loading}
-            className="flex items-center gap-1.5 px-4 py-2 bg-violet-600 hover:bg-violet-500 text-white rounded-xl text-xs font-semibold transition-all disabled:opacity-50 shadow-md shadow-violet-600/10"
+            className="ui-btn-primary flex items-center gap-1.5 px-4 py-2 text-xs font-semibold"
           >
             <Printer className="h-4 w-4" />
             In PDF

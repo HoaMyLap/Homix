@@ -47,19 +47,29 @@ export function CreateTaskModal({
 }: CreateTaskModalProps) {
   if (!show) return null;
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md glass p-8 rounded-2xl relative">
-        <h3 className="text-xl font-bold mb-6 font-display">Tạo Công việc mới</h3>
+    <div className="ui-modal-overlay" role="dialog" aria-modal="true">
+      <div className="w-full max-w-md glass p-8 rounded-2xl relative border border-border shadow-2xl">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-xl font-bold font-display text-heading">Tạo Công việc mới</h3>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Đóng hộp thoại"
+            className="ui-btn-ghost p-1.5"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
 
         {taskError && (
-          <div className="mb-4 p-3 rounded-lg bg-red-950/40 border border-red-500/20 text-red-400 text-sm">
+          <div className="ui-alert-error mb-4">
             {taskError}
           </div>
         )}
 
         <form onSubmit={onSubmit} className="space-y-4">
           <div>
-            <label className="block text-zinc-300 text-xs font-semibold uppercase tracking-wider mb-2">
+            <label className="ui-label">
               Tiêu đề công việc
             </label>
             <input
@@ -68,12 +78,12 @@ export function CreateTaskModal({
               value={newTaskTitle}
               onChange={(e) => setNewTaskTitle(e.target.value)}
               placeholder="Ví dụ: Thiết kế Database, Code API..."
-              className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-violet-500"
+              className="ui-input px-4 py-2.5 text-sm"
             />
           </div>
 
           <div>
-            <label className="block text-zinc-300 text-xs font-semibold uppercase tracking-wider mb-2">
+            <label className="ui-label">
               Mô tả chi tiết
             </label>
             <textarea
@@ -81,18 +91,18 @@ export function CreateTaskModal({
               onChange={(e) => setNewTaskDesc(e.target.value)}
               placeholder="Nhập yêu cầu chi tiết của công việc..."
               rows={3}
-              className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-violet-500 resize-none"
+              className="ui-textarea px-4 py-2.5 text-sm resize-none"
             />
           </div>
 
           <div>
-            <label className="block text-zinc-300 text-xs font-semibold uppercase tracking-wider mb-2">
+            <label className="ui-label">
               Độ ưu tiên
             </label>
             <select
               value={newTaskPriority}
               onChange={(e) => setNewTaskPriority(e.target.value)}
-              className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-violet-500"
+              className="ui-select px-4 py-2.5 text-sm"
             >
               <option value="LOW">LOW (Thấp)</option>
               <option value="MEDIUM">MEDIUM (Trung bình)</option>
@@ -105,14 +115,14 @@ export function CreateTaskModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-sm font-medium hover:bg-zinc-800"
+              className="ui-btn-secondary px-4 py-2 text-sm"
             >
               Hủy
             </button>
             <button
               type="submit"
               disabled={taskLoading}
-              className="px-5 py-2 bg-violet-600 hover:bg-violet-500 text-white rounded-xl text-sm font-medium transition-all"
+              className="ui-btn-primary px-5 py-2 text-sm"
             >
               {taskLoading ? 'Đang tạo...' : 'Tạo'}
             </button>

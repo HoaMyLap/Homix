@@ -52,7 +52,7 @@ export default function KanbanHeader({
 }: KanbanHeaderProps) {
   return (
     <>
-      <div className="max-w-7xl w-full mx-auto px-6 mt-6 flex flex-col md:flex-row md:items-center justify-between no-print gap-4">
+      <div className="max-w-7xl w-full mx-auto pl-16 pr-6 md:px-6 mt-6 flex flex-col md:flex-row md:items-center justify-between no-print gap-4">
         <button
           onClick={onBack}
           className="flex items-center gap-2 text-secondary hover:text-foreground transition-colors text-xs font-semibold shrink-0"
@@ -90,13 +90,13 @@ export default function KanbanHeader({
           </div>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
           <button
             onClick={onOpenExcelModal}
-            className="flex items-center gap-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 px-3.5 py-2 rounded-xl text-xs font-bold text-emerald-400 transition-all active:scale-[0.98]"
+            className="flex items-center gap-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 px-3.5 py-2 rounded-xl text-xs font-bold text-emerald-600 dark:text-emerald-400 transition-all active:scale-[0.98]"
             title="Nhập hàng loạt công việc từ file Excel (.xlsx)"
           >
-            <FileSpreadsheet className="h-4 w-4 text-emerald-400" />
+            <FileSpreadsheet className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
             {t('addBatchExcel')}
           </button>
           <button
@@ -143,16 +143,16 @@ export default function KanbanHeader({
               </div>
             ))}
             {members.length > 4 && (
-              <div className="flex items-center justify-center h-7 w-7 rounded-full bg-zinc-800 border-2 border-card text-[9px] font-black text-zinc-300 ring-1 ring-border shrink-0">
+              <div className="flex items-center justify-center h-7 w-7 rounded-full bg-surface-elevated border-2 border-card text-[10px] font-black text-heading ring-1 ring-border shrink-0">
                 +{members.length - 4}
               </div>
             )}
           </div>
           <div className="text-left">
-            <div className="text-[10px] font-bold text-zinc-300">
+            <div className="text-[11px] font-bold text-heading">
               {language === 'vi' ? 'Thành viên dự án' : 'Project Members'}
             </div>
-            <div className="text-[9px] text-muted">
+            <div className="text-[10px] text-muted">
               {members.length} {language === 'vi' ? 'nhân sự' : 'members'}
             </div>
           </div>
