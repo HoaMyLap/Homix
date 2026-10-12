@@ -11,7 +11,7 @@ import { createWorkspaceStompClient } from '@/lib/socket';
 import { Client } from '@stomp/stompjs';
 import * as XLSX from 'xlsx';
 import { 
-  ArrowLeft, Plus, Folder, Users, Trash, PlusCircle, 
+  ArrowLeft, ChevronRight, Plus, Folder, Users, Trash, PlusCircle, 
   Pencil, Shield, X, CheckCircle2, Activity, Layers,
   FileSpreadsheet, Upload, Download, Bell, AlertTriangle, FolderOpen, FileText, Image as ImageIcon
 } from 'lucide-react';
