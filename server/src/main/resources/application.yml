@@ -55,7 +55,8 @@ app:
     expiration-ms: 86400000 # 24 hours
   ai:
     openrouter:
-      api-key: ${OPENROUTER_API_KEY:sk-or-v1-placeholder-key}
+      api-key: ${OPENROUTER_API_KEY:}
+      model: ${OPENROUTER_MODEL:nvidia/nemotron-3-ultra-550b-a55b:free}
 
 logging:
   level:

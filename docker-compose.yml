@@ -84,9 +84,8 @@ services:
       - SPRING_DATA_REDIS_PORT=6379
       - JWT_SECRET=${JWT_SECRET}
       - JWT_EXPIRATION=86400000 # 1 day in milliseconds
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - GEMINI_API_KEY=${GEMINI_API_KEY}
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - OPENROUTER_MODEL=${OPENROUTER_MODEL:-nvidia/nemotron-3-ultra-550b-a55b:free}
       - MINIO_ENDPOINT=http://minio:9000
       - MINIO_PUBLIC_ENDPOINT=http://localhost:9020
       - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}

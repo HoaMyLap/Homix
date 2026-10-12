@@ -25,10 +25,8 @@ class OpenRouterServiceClientTests {
     }
 
     @Test
-    void testParseSubtasksFallbackText() {
+    void testParseSubtasksInvalidJsonThrowsException() {
         String text = "1. Setup backend\n2. Setup frontend\n3. Write tests";
-        List<String> result = client.parseSubtasks(text);
-        assertEquals(3, result.size());
-        assertEquals("Setup backend", result.get(0));
+        assertThrows(RuntimeException.class, () -> client.parseSubtasks(text));
     }
 }

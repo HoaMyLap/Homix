@@ -272,12 +272,8 @@ public class AiService {
                 CHỈ trả về mảng JSON, không viết lời mở đầu hay kết luận.
                 """, query, sb.toString());
 
-        try {
-            String rawResponse = openRouterServiceClient.generateContent(prompt);
-            return parseSearchResults(rawResponse, tasks);
-        } catch (Exception e) {
-            return List.of();
-        }
+        String rawResponse = openRouterServiceClient.generateContent(prompt);
+        return parseSearchResults(rawResponse, tasks);
     }
 
     private List<AiSearchResultDto> parseSearchResults(String rawResponse, List<TaskEntity> allTasks) {
