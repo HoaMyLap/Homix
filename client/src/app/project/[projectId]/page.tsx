@@ -934,9 +934,27 @@ export default function ProjectKanbanPage() {
     }
   };
 
+  // Quick Filter States on Kanban Board
+  const [quickFilterText, setQuickFilterText] = useState('');
+  const [quickFilterPriority, setQuickFilterPriority] = useState('ALL');
+  const [quickFilterMyTasks, setQuickFilterMyTasks] = useState(false);
+
   const getTasksByStatus = (status: string) => {
+    const keyword = quickFilterText.trim().toLowerCase();
     return tasks
-      .filter((t) => t.status === status && !t.parentTaskId)
+      .filter((t) => {
+        if (t.status !== status || t.parentTaskId) return false;
+        if (quickFilterPriority !== 'ALL' && t.priority !== quickFilterPriority) return false;
+        if (quickFilterMyTasks && t.assigneeId !== currentUserId) return false;
+        if (
+          keyword &&
+          !t.title.toLowerCase().includes(keyword) &&
+          !(t.description || '').toLowerCase().includes(keyword)
+        ) {
+          return false;
+        }
+        return true;
+      })
       .sort((a, b) => a.position - b.position);
   };
 
@@ -1442,12 +1460,14 @@ export default function ProjectKanbanPage() {
 
       <Sidebar />
 
-      <div className="flex-1 flex flex-col min-w-0 h-screen relative z-10 overflow-y-auto pb-12">
+      <div className="flex-1 flex flex-col min-w-0 h-screen relative z-10 overflow-y-auto pb-8">
         <KanbanHeader
           t={t}
           language={language}
           project={project}
+          workspaceName={workspaceName}
           members={members}
+          canCreateTask={canCreateTask}
           projectTab={projectTab}
           setProjectTab={setProjectTab}
           projectFilesCount={projectFiles.length}
@@ -1455,7 +1475,17 @@ export default function ProjectKanbanPage() {
           setAiSearchQuery={setAiSearchQuery}
           aiSearchLoading={aiSearchLoading}
           onAiSmartSearch={handleAiSmartSearch}
-          onBack={() => router.back()}
+          quickFilterText={quickFilterText}
+          setQuickFilterText={setQuickFilterText}
+          quickFilterPriority={quickFilterPriority}
+          setQuickFilterPriority={setQuickFilterPriority}
+          quickFilterMyTasks={quickFilterMyTasks}
+          setQuickFilterMyTasks={setQuickFilterMyTasks}
+          onBack={() => (workspaceId ? router.push(`/workspace/${workspaceId}`) : router.back())}
+          onOpenCreateTask={() => {
+            setModalStatus('TODO');
+            setShowTaskModal(true);
+          }}
           onOpenExcelModal={() => setShowExcelTaskModal(true)}
           onFetchAiSummary={handleFetchAiSummary}
           onRequestLeaveProject={handleRequestLeaveProject}

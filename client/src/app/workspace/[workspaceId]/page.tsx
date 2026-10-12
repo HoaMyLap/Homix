@@ -916,166 +916,167 @@ export default function WorkspaceDetailPage() {
       <Sidebar />
 
       <div className="flex-1 flex flex-col min-w-0 h-screen relative z-10 overflow-y-auto pb-12">
-        <div className="max-w-6xl w-full mx-auto pl-16 pr-6 md:px-6 mt-6">
-          <Link href="/" className="flex items-center gap-2 text-secondary hover:text-foreground transition-colors text-xs font-semibold">
-            <ArrowLeft className="h-4.5 w-4.5" />
-            {t('backToWorkspaceList')}
-          </Link>
+        {/* Top Breadcrumb Navigation */}
+        <div className="max-w-6xl w-full mx-auto pl-16 pr-6 md:px-6 mt-5 flex items-center justify-between gap-4">
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-semibold text-secondary min-w-0">
+            <Link href="/" className="flex items-center gap-1.5 hover:text-primary transition-colors shrink-0">
+              <ArrowLeft className="h-4 w-4" />
+              <span>{language === 'vi' ? 'Tổng quan Workspace' : 'Workspace Hub'}</span>
+            </Link>
+            <ChevronRight className="h-3.5 w-3.5 text-muted shrink-0" />
+            <span className="text-heading font-bold truncate">
+              {workspaceName || t('workspaceDetailsTitle')}
+            </span>
+          </nav>
+
+          {isAdmin && (
+            <button
+              onClick={handleDeleteWorkspace}
+              className="px-3 py-1.5 text-[11px] font-bold flex items-center gap-1.5 rounded-xl bg-rose-500/10 text-rose-500 dark:text-rose-400 border border-rose-500/20 hover:bg-rose-500 hover:text-white transition-all cursor-pointer shrink-0"
+              title={language === 'vi' ? 'Xóa hoàn toàn không gian làm việc (Chỉ Admin)' : 'Delete Workspace (Admin Only)'}
+            >
+              <Trash className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">{language === 'vi' ? 'Xóa Workspace' : 'Delete Workspace'}</span>
+            </button>
+          )}
         </div>
 
         {/* Hero Header Banner & Stats Overview */}
-        <div className="max-w-6xl w-full mx-auto px-6 mt-6">
-          <div className="glass p-6 md:p-8 rounded-2xl border border-border relative overflow-hidden shadow-xl">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
-              <div>
-                <div className="flex items-center gap-2 mb-2">
+        <div className="max-w-6xl w-full mx-auto px-6 mt-4">
+          <div className="glass p-5 md:p-6 rounded-2xl border border-border relative overflow-hidden shadow-lg">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 mb-1.5">
                   <span className="text-[10px] font-bold text-primary bg-primary/10 border border-primary/20 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
                     Homix Workspace
                   </span>
-                  <span className="text-[10px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                  <span className="text-[10px] font-semibold text-emerald-500 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-full flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> {t('activeStatus')}
                   </span>
                 </div>
-                <h1 className="text-2xl md:text-3xl font-black font-display text-heading tracking-tight">
-                  {t('workspaceDetailsTitle')}
+                <h1 className="text-xl md:text-2xl font-black font-display text-heading tracking-tight truncate">
+                  {workspaceName || t('workspaceDetailsTitle')}
                 </h1>
-                <p className="text-secondary text-xs md:text-sm mt-1 max-w-xl leading-relaxed">
+                <p className="text-secondary text-xs mt-0.5 max-w-xl leading-relaxed">
                   {t('workspaceDetailsDesc')}
                 </p>
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-3 shrink-0">
-                {checkPermission('PROJECT_CREATE') && (
-                  <button
-                    onClick={() => setShowProjModal(true)}
-                    className="ui-btn-primary px-4 py-2.5 text-xs font-bold flex items-center gap-2 shadow-md hover:scale-[1.02] transition-transform"
-                  >
-                    <Plus className="h-4 w-4" />
-                    {t('createProject')}
-                  </button>
-                )}
+              {/* Primary Action Buttons */}
+              <div className="flex flex-wrap items-center gap-2.5 shrink-0">
                 {checkPermission('WORKSPACE_MEMBER_INVITE') && (
                   <button
                     onClick={() => setShowInviteModal(true)}
-                    className="ui-btn-secondary px-4 py-2.5 text-xs font-bold flex items-center gap-2 border-primary/30 text-primary hover:bg-primary/10"
+                    className="ui-btn-secondary px-4 py-2 text-xs font-bold flex items-center gap-2 border-primary/30 text-primary hover:bg-primary/10"
                   >
                     <Users className="h-4 w-4" />
                     {t('addMember')}
                   </button>
                 )}
-                {isAdmin && (
+                {checkPermission('PROJECT_CREATE') && (
                   <button
-                    onClick={handleDeleteWorkspace}
-                    className="px-3.5 py-2.5 text-xs font-bold flex items-center gap-1.5 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/20 hover:bg-rose-500 hover:text-white transition-all cursor-pointer"
-                    title={language === 'vi' ? 'Xóa hoàn toàn không gian làm việc (Chỉ Admin)' : 'Delete Workspace (Admin Only)'}
+                    onClick={() => setShowProjModal(true)}
+                    className="ui-btn-primary px-4 py-2 text-xs font-bold flex items-center gap-2 shadow-md hover:scale-[1.02] transition-transform"
                   >
-                    <Trash className="h-4 w-4" />
-                    <span>{language === 'vi' ? 'Xóa Workspace' : 'Delete Workspace'}</span>
+                    <Plus className="h-4 w-4" />
+                    {t('createProject')}
                   </button>
                 )}
               </div>
             </div>
 
             {/* 4 Stats Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-6 border-t border-border-subtle">
-              <div className="bg-surface/50 border border-border p-4 rounded-xl">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-5 pt-5 border-t border-border-subtle">
+              <div className="bg-surface/50 border border-border p-3.5 rounded-xl">
                 <div className="flex items-center justify-between text-muted mb-1">
                   <span className="text-[10px] font-bold uppercase tracking-wider">{t('totalProjectsCount')}</span>
                   <Layers className="h-4 w-4 text-primary" />
                 </div>
-                <div className="text-xl font-extrabold text-heading">{projects.length}</div>
-                <div className="text-[10px] text-secondary mt-1">
+                <div className="text-lg font-extrabold text-heading">{projects.length}</div>
+                <div className="text-[10px] text-secondary mt-0.5">
                   {projects.filter(p => p.status === 'COMPLETED').length} {t('completedCount')}
                 </div>
               </div>
 
-              <div className="bg-surface/50 border border-border p-4 rounded-xl">
+              <div className="bg-surface/50 border border-border p-3.5 rounded-xl">
                 <div className="flex items-center justify-between text-muted mb-1">
                   <span className="text-[10px] font-bold uppercase tracking-wider">{t('membersCount')}</span>
                   <Users className="h-4 w-4 text-blue-400" />
                 </div>
-                <div className="text-xl font-extrabold text-heading">{members.length}</div>
-                <div className="text-[10px] text-secondary mt-1">
+                <div className="text-lg font-extrabold text-heading">{members.length}</div>
+                <div className="text-[10px] text-secondary mt-0.5">
                   {members.filter(m => m.role === 'ADMIN').length} {t('adminCount')}
                 </div>
               </div>
 
-              <div className="bg-surface/50 border border-border p-4 rounded-xl">
+              <div className="bg-surface/50 border border-border p-3.5 rounded-xl">
                 <div className="flex items-center justify-between text-muted mb-1">
                   <span className="text-[10px] font-bold uppercase tracking-wider">{t('activityLevel')}</span>
                   <Activity className="h-4 w-4 text-emerald-400" />
                 </div>
-                <div className="text-xl font-extrabold text-emerald-400">{t('stableStatus')}</div>
-                <div className="text-[9px] text-secondary mt-1">{t('syncedWebSocket')}</div>
+                <div className="text-lg font-extrabold text-emerald-500 dark:text-emerald-400">{t('stableStatus')}</div>
+                <div className="text-[10px] text-secondary mt-0.5">{t('syncedWebSocket')}</div>
               </div>
 
-              <div className="bg-surface/50 border border-border p-4 rounded-xl">
+              <div className="bg-surface/50 border border-border p-3.5 rounded-xl">
                 <div className="flex items-center justify-between text-muted mb-1">
                   <span className="text-[10px] font-bold uppercase tracking-wider">{t('yourRole')}</span>
                   <Shield className="h-4 w-4 text-amber-400" />
                 </div>
-                <div className="text-xl font-extrabold text-heading">
+                <div className="text-lg font-extrabold text-heading">
                   {isAdmin ? 'ADMIN' : (currentUserMember?.role || 'MEMBER')}
                 </div>
-                <div className="text-[10px] text-secondary mt-1">{t('systemPermission')}</div>
+                <div className="text-[10px] text-secondary mt-0.5">{t('systemPermission')}</div>
               </div>
             </div>
           </div>
         </div>
 
-        <main className="max-w-6xl mx-auto px-6 mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10 w-full">
+        <main className="max-w-6xl mx-auto px-6 mt-6 grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10 w-full">
           {/* Left Column: Projects list */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-5">
             {/* Tabs for Workspace Left Column */}
-            <div className="flex border-b border-border-subtle/80 gap-6 mb-2">
-              <button
-                type="button"
-                onClick={() => setWorkspaceActiveTab('projects')}
-                className={`pb-3 text-sm font-extrabold border-b-2 transition-all flex items-center gap-2 border-0 bg-transparent cursor-pointer ${
-                  workspaceActiveTab === 'projects'
-                    ? 'border-primary text-primary'
-                    : 'border-transparent text-secondary hover:text-foreground'
-                }`}
-              >
-                <Folder className="h-4.5 w-4.5" />
-                Dự án ({projects.length})
-              </button>
-              <button
-                type="button"
-                onClick={() => setWorkspaceActiveTab('documents')}
-                className={`pb-3 text-sm font-extrabold border-b-2 transition-all flex items-center gap-2 border-0 bg-transparent cursor-pointer ${
-                  workspaceActiveTab === 'documents'
-                    ? 'border-primary text-primary'
-                    : 'border-transparent text-secondary hover:text-foreground'
-                }`}
-              >
-                <FolderOpen className="h-4.5 w-4.5" />
-                Kho tài liệu & Thư mục
-              </button>
+            <div className="flex items-center justify-between border-b border-border-subtle/80 gap-4">
+              <div className="flex items-center gap-6">
+                <button
+                  type="button"
+                  onClick={() => setWorkspaceActiveTab('projects')}
+                  className={`pb-3 text-sm font-extrabold border-b-2 transition-all flex items-center gap-2 border-0 bg-transparent cursor-pointer ${
+                    workspaceActiveTab === 'projects'
+                      ? 'border-primary text-primary'
+                      : 'border-transparent text-secondary hover:text-foreground'
+                  }`}
+                >
+                  <Folder className="h-4 w-4" />
+                  <span>{language === 'vi' ? 'Dự án' : 'Projects'} ({projects.length})</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setWorkspaceActiveTab('documents')}
+                  className={`pb-3 text-sm font-extrabold border-b-2 transition-all flex items-center gap-2 border-0 bg-transparent cursor-pointer ${
+                    workspaceActiveTab === 'documents'
+                      ? 'border-primary text-primary'
+                      : 'border-transparent text-secondary hover:text-foreground'
+                  }`}
+                >
+                  <FolderOpen className="h-4 w-4" />
+                  <span>{language === 'vi' ? 'Kho tài liệu & Thư mục' : 'Documents & Folders'}</span>
+                </button>
+              </div>
+
+              {workspaceActiveTab === 'projects' && checkPermission('PROJECT_CREATE') && (
+                <button
+                  onClick={() => setShowProjModal(true)}
+                  className="pb-2.5 text-xs font-bold text-primary flex items-center gap-1 hover:underline border-0 bg-transparent cursor-pointer shrink-0"
+                >
+                  <Plus className="h-3.5 w-3.5" />
+                  {t('create')}
+                </button>
+              )}
             </div>
 
             {workspaceActiveTab === 'projects' ? (
               <>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className="text-base font-bold tracking-tight font-display text-heading flex items-center gap-2">
-                      <Folder className="h-5 w-5 text-primary" />
-                      Danh sách dự án ({projects.length})
-                    </h2>
-                    <p className="text-secondary text-xs mt-0.5">
-                      {t('selectProjectToTrack')}
-                    </p>
-                  </div>
-
-                  {checkPermission('PROJECT_CREATE') && (
-                    <button onClick={() => setShowProjModal(true)} className="ui-btn-ghost text-xs font-semibold text-primary flex items-center gap-1 hover:underline border-0 bg-transparent cursor-pointer">
-                      <Plus className="h-3.5 w-3.5" />
-                      {t('create')}
-                    </button>
-                  )}
-                </div>
-
                 {projects.length === 0 ? (
                   <div className="glass rounded-2xl p-12 text-center border border-border">
                     <Folder className="h-12 w-12 text-muted mx-auto mb-4" />

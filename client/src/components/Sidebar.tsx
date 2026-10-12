@@ -341,15 +341,15 @@ export default function Sidebar() {
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
-  // Informational Guest pages to add to sidebar
-  const infoPages = [
-    { name: t('home'), path: '/', icon: <Home className="w-5 h-5 shrink-0" /> },
-    ...(systemRole === 'ADMIN' ? [{ name: language === 'vi' ? 'Admin Hệ Thống' : 'System Admin', path: '/admin', icon: <Shield className="w-5 h-5 shrink-0 text-amber-400" /> }] : []),
-    { name: t('features'), path: '/features', icon: <Zap className="w-5 h-5 shrink-0" /> },
-    { name: t('pricing'), path: '/pricing', icon: <TrendingUp className="w-5 h-5 shrink-0" /> },
-    { name: t('terms'), path: '/terms', icon: <Shield className="w-5 h-5 shrink-0" /> },
-    { name: t('contact'), path: '/contact', icon: <MessageSquare className="w-5 h-5 shrink-0" /> },
+  const explorePages = [
+    { name: t('features'), path: '/features', icon: <Zap className="w-4 h-4 shrink-0" /> },
+    { name: t('pricing'), path: '/pricing', icon: <TrendingUp className="w-4 h-4 shrink-0" /> },
+    { name: t('terms'), path: '/terms', icon: <Shield className="w-4 h-4 shrink-0" /> },
+    { name: t('contact'), path: '/contact', icon: <MessageSquare className="w-4 h-4 shrink-0" /> },
   ];
+
+  const isExplorePath = explorePages.some((p) => pathname === p.path);
+  const [showExploreGroup, setShowExploreGroup] = useState(isExplorePath);
 
   return (
     <>
@@ -403,132 +403,205 @@ export default function Sidebar() {
       </button>
 
       {/* Top Section */}
-      <div className="flex-1 flex flex-col overflow-y-auto">
+      <div className="flex-1 flex flex-col overflow-y-auto min-h-0">
         {/* Brand Header */}
-        <div className={`border-b border-border flex items-center justify-center overflow-hidden ${isCollapsed ? 'p-3 h-16' : 'p-2 h-24'}`}>
+        <Link
+          href="/"
+          className={`border-b border-border flex items-center justify-center overflow-hidden shrink-0 hover: opacity-95 transition-opacity ${
+            isCollapsed ? 'p-2.5 h-16' : 'px-4 py-2 h-16'
+          }`}
+        >
           <img 
             src={isCollapsed ? "/minilogo.png" : "/logo2.png"} 
             alt="Homix Logo" 
-            style={{ transform: 'scale(1.3)' }}
             className={`object-contain transition-all duration-300 ${
-              isCollapsed ? 'h-10 w-10' : 'w-[75%] h-full max-h-20'
+              isCollapsed ? 'h-9 w-9' : 'h-12 w-auto max-w-[170px]'
             }`} 
           />
-        </div>
+        </Link>
 
         {/* System Admin Dedicated Switcher Banner */}
         {systemRole === 'ADMIN' && (
-          <div className="p-3 border-b border-border/80 bg-amber-500/5">
+          <div className="px-3 pt-3 pb-1 shrink-0">
             <Link
               href="/admin"
-              className={`w-full flex items-center gap-2.5 p-2.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-amber-600/15 to-indigo-600/20 border border-amber-500/40 text-amber-500 dark:text-amber-400 font-bold hover:from-amber-500/30 hover:to-indigo-600/30 transition-all shadow-md no-underline ${
+              className={`w-full flex items-center gap-2.5 p-2 rounded-xl bg-gradient-to-r from-amber-500/20 via-amber-600/15 to-indigo-600/20 border border-amber-500/40 text-amber-500 dark:text-amber-400 font-bold hover:from-amber-500/30 hover:to-indigo-600/30 transition-all shadow-sm no-underline ${
                 isCollapsed ? 'justify-center p-2' : ''
               }`}
               title={language === 'vi' ? 'Quay lại Trang Admin Hệ Thống' : 'Return to System Admin Portal'}
             >
-              <Shield className="w-5 h-5 text-amber-500 dark:text-amber-400 shrink-0 animate-pulse" />
+              <Shield className="w-4 h-4 text-amber-500 dark:text-amber-400 shrink-0 animate-pulse" />
               {!isCollapsed && (
-                <div className="min-w-0 flex-1">
-                  <div className="text-xs font-bold truncate text-amber-600 dark:text-amber-400 flex items-center gap-1">
-                    <span>{language === 'vi' ? 'Admin Hệ Thống' : 'System Admin'}</span>
-                  </div>
-                  <div className="text-[10px] text-amber-600/80 dark:text-amber-300/80 font-normal truncate">
-                    {language === 'vi' ? 'Chuyển về Admin ➔' : 'Return to Console ➔'}
-                  </div>
+                <div className="min-w-0 flex-1 flex items-center justify-between">
+                  <span className="text-xs font-bold truncate text-amber-600 dark:text-amber-400">
+                    {language === 'vi' ? 'Admin Hệ Thống' : 'System Admin'}
+                  </span>
+                  <ChevronRight className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                 </div>
               )}
             </Link>
           </div>
         )}
 
-        {/* Informational Pages Navigation Menu */}
-        <div className="p-3 space-y-1">
+        {/* Primary Workspace Hub & Notifications Navigation */}
+        <div className="px-3 pt-3 pb-2 space-y-1 shrink-0">
           {!isCollapsed && (
             <div className="text-[10px] font-bold text-muted uppercase tracking-wider px-3 mb-1">
-              {language === 'vi' ? 'Liên kết chính' : 'Main Links'}
+              {language === 'vi' ? 'Bàn làm việc' : 'Workspace Hub'}
             </div>
           )}
-          {infoPages.map((page, idx) => {
-            const isActive = pathname === page.path;
-            return (
-              <Link 
-                key={idx}
-                href={page.path}
-                className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold transition-all ${
-                  isCollapsed ? 'justify-center px-0' : ''
-                } ${
-                  isActive 
-                    ? 'bg-primary/10 text-primary' 
-                    : 'text-secondary hover:bg-hover hover:text-primary'
-                }`}
-                title={isCollapsed ? page.name : undefined}
-              >
-                {page.icon}
-                {!isCollapsed && <span>{page.name}</span>}
-              </Link>
-            );
-          })}
+          <Link
+            href="/"
+            className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold transition-all ${
+              isCollapsed ? 'justify-center px-0' : ''
+            } ${
+              pathname === '/'
+                ? 'bg-primary/10 text-primary border border-primary/20'
+                : 'text-secondary hover:bg-hover hover:text-primary'
+            }`}
+            title={isCollapsed ? t('home') : undefined}
+          >
+            <Home className="w-4 h-4 shrink-0" />
+            {!isCollapsed && <span>{language === 'vi' ? 'Tổng quan Workspace' : 'Workspace Hub'}</span>}
+          </Link>
+
+          <Link
+            href="/notifications"
+            className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold transition-all ${
+              isCollapsed ? 'justify-center px-0 relative' : ''
+            } ${
+              pathname === '/notifications'
+                ? 'bg-primary/10 text-primary border border-primary/20'
+                : 'text-secondary hover:bg-hover hover:text-primary'
+            }`}
+            title={isCollapsed ? t('notifications') : undefined}
+          >
+            <div className="flex items-center gap-3">
+              <Bell className="w-4 h-4 shrink-0" />
+              {!isCollapsed && <span>{t('notifications')}</span>}
+            </div>
+            {unreadCount > 0 && (
+              <span className={`${isCollapsed ? 'absolute top-1 right-1.5' : ''} h-4 min-w-4 px-1 bg-error rounded-full text-[10px] font-bold flex items-center justify-center text-white`}>
+                {unreadCount}
+              </span>
+            )}
+          </Link>
         </div>
 
-        {/* Workspaces list */}
-        <div className="px-3 py-2 flex-1 border-t border-border-subtle mt-2">
-          {!isCollapsed && (
-            <div className="flex items-center justify-between text-[10px] font-bold text-muted uppercase tracking-wider px-3 mb-2">
-              <span>{t('workspace')}</span>
-            </div>
-          )}
-          
-          <div className="space-y-1 max-h-36 overflow-y-auto">
-            {workspaces.map((ws) => (
-              <Link 
-                key={ws.id} 
-                href={`/workspace/${ws.id}`}
-                className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-sm transition-all ${
-                  isCollapsed ? 'justify-center px-0' : ''
-                } ${
-                  ws.id === workspaceId || (currentWorkspace && currentWorkspace.id === ws.id)
-                    ? 'bg-primary/5 text-primary font-bold border border-primary/20'
-                    : 'text-secondary hover:bg-hover hover:text-primary'
-                }`}
-                title={isCollapsed ? ws.name : undefined}
-              >
-                <div className={`flex items-center gap-2.5 ${isCollapsed ? 'justify-center' : 'truncate'}`}>
-                  <Briefcase className="w-5 h-5 shrink-0" />
-                  {!isCollapsed && <span className="truncate">{ws.name}</span>}
-                </div>
-                {!isCollapsed && <ChevronRight className="w-4 h-4 opacity-60" />}
-              </Link>
-            ))}
-            {workspaces.length === 0 && !loading && !isCollapsed && (
-              <span className="text-[11px] text-muted px-3 block">{t('noWorkspace')}</span>
+        {/* Workspaces & Active Projects Tree (Main Scrollable Area) */}
+        <div className="px-3 py-2 flex-1 border-t border-border-subtle overflow-y-auto space-y-3 min-h-0">
+          <div>
+            {!isCollapsed && (
+              <div className="flex items-center justify-between text-[10px] font-bold text-muted uppercase tracking-wider px-3 mb-1.5">
+                <span>{t('workspace')} ({workspaces.length})</span>
+              </div>
             )}
-          </div>
 
-          {/* Sibling Projects list */}
-          {currentWorkspace && !isCollapsed && (
-            <div className="mt-4 pt-3 border-t border-border-subtle">
-              <div className="flex items-center justify-between text-[10px] font-bold text-muted uppercase tracking-wider px-3 mb-2">
-                <span className="truncate">{t('subProjectsHeader')} {currentWorkspace.name}</span>
-              </div>
-              <div className="space-y-1 max-h-36 overflow-y-auto">
-                {projects.map((proj) => (
-                  <Link
-                    key={proj.id}
-                    href={`/project/${proj.id}`}
-                    className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm transition-all ${
-                      proj.id === projectId
-                        ? 'bg-violet-500/10 text-violet-400 font-bold border border-violet-500/20'
-                        : 'text-secondary hover:bg-hover hover:text-primary'
-                    }`}
-                  >
-                    <Folder className="w-5 h-5 shrink-0" />
-                    <span className="truncate">{proj.name}</span>
-                  </Link>
-                ))}
-                {projects.length === 0 && !loading && (
-                  <span className="text-[11px] text-muted px-3 block">{t('noProjectsInWs')}</span>
-                )}
-              </div>
+            <div className="space-y-1">
+              {workspaces.map((ws) => {
+                const isCurrentWs = ws.id === workspaceId || (currentWorkspace && currentWorkspace.id === ws.id);
+                return (
+                  <div key={ws.id} className="space-y-1">
+                    <Link 
+                      href={`/workspace/${ws.id}`}
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-all ${
+                        isCollapsed ? 'justify-center px-0' : ''
+                      } ${
+                        isCurrentWs
+                          ? 'bg-primary/10 text-primary font-bold border border-primary/20'
+                          : 'text-secondary font-medium hover:bg-hover hover:text-primary'
+                      }`}
+                      title={isCollapsed ? ws.name : undefined}
+                    >
+                      <div className={`flex items-center gap-2.5 ${isCollapsed ? 'justify-center' : 'truncate'}`}>
+                        <Briefcase className="w-4 h-4 shrink-0" />
+                        {!isCollapsed && <span className="truncate">{ws.name}</span>}
+                      </div>
+                      {!isCollapsed && (
+                        <ChevronRight className={`w-3.5 h-3.5 transition-transform ${isCurrentWs ? 'rotate-90 text-primary' : 'opacity-50'}`} />
+                      )}
+                    </Link>
+
+                    {/* Nested Projects under active Workspace */}
+                    {isCurrentWs && !isCollapsed && (
+                      <div className="ml-4 pl-2.5 border-l border-border space-y-0.5 py-0.5">
+                        {projects.map((proj) => (
+                          <Link
+                            key={proj.id}
+                            href={`/project/${proj.id}`}
+                            className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs transition-all ${
+                              proj.id === projectId
+                                ? 'bg-violet-500/15 text-violet-500 dark:text-violet-400 font-bold border border-violet-500/25'
+                                : 'text-secondary hover:bg-hover hover:text-primary'
+                            }`}
+                          >
+                            <Folder className="w-3.5 h-3.5 shrink-0" />
+                            <span className="truncate">{proj.name}</span>
+                          </Link>
+                        ))}
+                        {projects.length === 0 && !loading && (
+                          <span className="text-[11px] text-muted px-2.5 py-1 block">{t('noProjectsInWs')}</span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+              {workspaces.length === 0 && !loading && !isCollapsed && (
+                <span className="text-[11px] text-muted px-3 block">{t('noWorkspace')}</span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Collapsible Explore & Support Links */}
+        <div className="px-3 py-2 border-t border-border-subtle shrink-0">
+          {!isCollapsed ? (
+            <>
+              <button
+                type="button"
+                onClick={() => setShowExploreGroup(!showExploreGroup)}
+                className="w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-[10px] font-bold text-muted uppercase tracking-wider hover:text-foreground transition-colors cursor-pointer"
+              >
+                <span>{language === 'vi' ? 'Khám phá & Hỗ trợ' : 'Explore & Support'}</span>
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showExploreGroup ? 'rotate-180' : ''}`} />
+              </button>
+              {showExploreGroup && (
+                <div className="mt-1 space-y-0.5">
+                  {explorePages.map((page, idx) => {
+                    const isActive = pathname === page.path;
+                    return (
+                      <Link
+                        key={idx}
+                        href={page.path}
+                        className={`w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${
+                          isActive
+                            ? 'bg-primary/10 text-primary font-bold'
+                            : 'text-secondary hover:bg-hover hover:text-primary'
+                        }`}
+                      >
+                        {page.icon}
+                        <span>{page.name}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="flex flex-col items-center gap-1">
+              {explorePages.slice(0, 2).map((page, idx) => (
+                <Link
+                  key={idx}
+                  href={page.path}
+                  title={page.name}
+                  className={`p-2 rounded-xl transition-all ${
+                    pathname === page.path ? 'bg-primary/10 text-primary' : 'text-secondary hover:bg-hover hover:text-primary'
+                  }`}
+                >
+                  {page.icon}
+                </Link>
+              ))}
             </div>
           )}
         </div>

@@ -34,7 +34,7 @@ export default function KanbanBoard({
   onDropOnCard,
 }: KanbanBoardProps) {
   return (
-    <main className="max-w-7xl mx-auto px-6 mt-6 grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+    <main className="max-w-7xl w-full mx-auto px-6 mt-3 grid grid-cols-1 md:grid-cols-3 gap-5 relative z-10 items-start">
       {columns.map((col) => (
         <KanbanColumn
           key={col.id}

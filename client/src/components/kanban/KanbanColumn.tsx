@@ -38,25 +38,31 @@ export default function KanbanColumn({
     <div
       onDragOver={onDragOver}
       onDrop={(e) => onDropOnColumn(e, col.id)}
-      className="glass p-5 rounded-2xl border border-border min-h-[500px] flex flex-col"
+      className="glass p-4 rounded-2xl border border-border flex flex-col max-h-[calc(100vh-195px)] min-h-[420px]"
     >
-      <div className="flex items-center justify-between mb-6 pb-3 border-b border-border-subtle">
+      <div className="flex items-center justify-between mb-3 pb-3 border-b border-border-subtle shrink-0">
         <div className="flex items-center gap-2">
           <span className={`h-2.5 w-2.5 rounded-full bg-current ${col.color}`} />
-          <h3 className="font-bold text-sm font-display">{col.title}</h3>
-          <span className="text-xs text-muted bg-surface px-2 py-0.5 rounded-md">
+          <h3 className="font-bold text-sm font-display text-heading">{col.title}</h3>
+          <span className="text-xs font-bold text-muted bg-surface border border-border px-2 py-0.5 rounded-lg">
             {colTasks.length}
           </span>
         </div>
 
         {canCreateTask && (
-          <button onClick={() => onOpenCreateModal(col.id)} className="ui-btn-ghost p-1.5">
+          <button
+            type="button"
+            onClick={() => onOpenCreateModal(col.id)}
+            aria-label={`Thêm công việc vào cột ${col.title}`}
+            title={`Thêm công việc vào cột ${col.title}`}
+            className="ui-btn-ghost p-1.5 hover:text-primary"
+          >
             <Plus className="h-4 w-4" />
           </button>
         )}
       </div>
 
-      <div className="flex-1 space-y-3 overflow-y-auto max-h-[600px] pr-1">
+      <div className="flex-1 space-y-3 overflow-y-auto pr-1 min-h-0">
         {colTasks.map((task) => (
           <KanbanCard
             key={task.id}
@@ -73,8 +79,17 @@ export default function KanbanColumn({
         ))}
 
         {colTasks.length === 0 && (
-          <div className="h-32 border border-dashed border-border rounded-xl flex items-center justify-center text-muted text-xs">
-            Kéo thẻ vào đây
+          <div className="h-32 border border-dashed border-border rounded-xl flex flex-col items-center justify-center gap-2 text-muted text-xs">
+            <span>Kéo thẻ vào đây</span>
+            {canCreateTask && (
+              <button
+                type="button"
+                onClick={() => onOpenCreateModal(col.id)}
+                className="text-[11px] font-bold text-primary hover:underline flex items-center gap-1 cursor-pointer"
+              >
+                <Plus className="h-3 w-3" /> Thêm công việc
+              </button>
+            )}
           </div>
         )}
       </div>
