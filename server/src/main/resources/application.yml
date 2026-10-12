@@ -1,0 +1,62 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: dev
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: homixspace@gmail.com
+    password: ${GMAIL_APP_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5433/smart_task_db
+    username: admin
+    password: supersecretpassword
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+
+minio:
+  endpoint: ${MINIO_ENDPOINT:http://127.0.0.1:9000}
+  public-endpoint: ${MINIO_PUBLIC_ENDPOINT:http://localhost:9000}
+  access-key: ${MINIO_ACCESS_KEY:minioadmin}
+  secret-key: ${MINIO_SECRET_KEY:minioadminpassword}
+  bucket-name: ${MINIO_BUCKET_NAME:smartmanager}
+
+app:
+  jwt:
+    secret: springboot_jwt_secret_dev_key_must_change_in_prod_long_key_32_bytes
+    expiration-ms: 86400000 # 24 hours
+  ai:
+    openrouter:
+      api-key: ${OPENROUTER_API_KEY:sk-or-v1-placeholder-key}
+
+logging:
+  level:
+    org.springframework.security: DEBUG
